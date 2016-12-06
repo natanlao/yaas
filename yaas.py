@@ -14,10 +14,7 @@ app.jinja_env.globals.update({
     'yaas_version': __version__
 })
 
-ydl_options = {
-    'skip_download': True,
-    'format': 'bestaudio/best'
-}
+ydl_options = {'skip_download': True}
 
 ydl = youtube_dl.YoutubeDL(ydl_options)
 ydl.add_default_info_extractors()
