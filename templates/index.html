@@ -14,29 +14,35 @@
 
       /* Body */
       .error { color: rgb(202, 60, 60); }
-      p { color: #333; text-align: justify; }
-      code a { color: #333; }
+      .error section { margin-top: 0; margin-bottom: 0; }
+      p, a { color: #333; text-align: justify; }
+      a:hover { color: #cbcbcb; }
 
       /* Structure */
       /* pure.css squashes text on small screens */
       .container { padding: 1em 2em; max-width: 768px; margin: 0 auto; letter-spacing: normal !important; }
-      @media screen and (min-width: 48em) { section { margin: 1.5em; } button { height: 36px; } header { padding: 0 1.25em; } ul { padding-left: 20px !important; } }
+      @media screen and (min-width: 48em) {
+        section { margin: 1.5em; }
+        button { height: 36px; }
+        header { padding: 0 1.25em; }
+        ul { padding-left: 20px !important; }
+      }
 
       /* Footer */
       footer { text-align: center !important; }
-      footer, footer a, footer a:visited, code a:hover { color: #cbcbcb; }
-      footer a:hover { color: #000; }
+      footer, footer a, footer a:visited { color: #cbcbcb; }
+      footer a:hover { color: #333; }
 
       /* Sticky footer */
       body { display: flex; min-height: 100vh; flex-direction: column; }
-      #content-main { flex: 1; }
+      #main { flex: 1; }
     </style>
 
     <link rel="stylesheet" href="//cdn.jsdelivr.net/g/pure@0.6.0(base-min.css+buttons-min.css+forms-min.css+forms-nr-min.css+grids-min.css+grids-responsive-min.css)">
   </head>
 
   <body>
-    <div class="pure-g container" id="content-main">
+    <div class="pure-g container" id="main">
 
       {# Header #}
       <header class="pure-u-1">
