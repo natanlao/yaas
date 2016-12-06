@@ -15,7 +15,6 @@ app.jinja_env.globals.update({
 })
 
 ydl_options = {
-
     'skip_download': True,
     'format': 'bestaudio/best'
 }
