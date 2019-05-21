@@ -5,7 +5,7 @@ import os
 from flask import flash, Flask, render_template, redirect, request, url_for
 import youtube_dl
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # dirty
