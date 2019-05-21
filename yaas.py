@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+import functools
+
 from flask import flash, Flask, render_template, redirect, request, url_for
 import os
-from werkzeug.contrib.cache import SimpleCache
 import youtube_dl
 
 __version__ = "0.1.0"
@@ -19,7 +20,6 @@ ydl_options = {'skip_download': True}
 ydl = youtube_dl.YoutubeDL(ydl_options)
 ydl.add_default_info_extractors()
 
-cache = SimpleCache()
 
 
 @app.route('/')
@@ -49,14 +49,9 @@ def get_video():
     return redirect(url)
 
 
+@functools.lru_cache(maxsize=None)
 def get_video_info(url):
-    rv = cache.get(url)
-
-    if rv is None:
-        rv = ydl.extract_info(url)['url']
-        cache.set(url, rv, timeout=60 * 60 * 24)
-
-    return rv
+    return ydl.extract_info(url)['url']
 
 
 if __name__ == "__main__":
