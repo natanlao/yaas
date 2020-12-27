@@ -1,107 +1,94 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>yaas: youtube-dl as a service</title>
+  <link rel="stylesheet" href="https://natan.la/css/default.css">
+  <style type="text/css">
+    /* purecss.io */
+    fieldset {
+      margin: 0;
+      padding: .35em 0 .75em;
+      border: 0;
+    }
+    input {
+      padding: .5em .6em;
+      border: 1px solid #ccc;
+      margin: .25em;
+    }
+    button {
+      font-size: 100%;
+      border: transparent;
+      padding: .4em;
+      text-decoration: none;
+      line-height: normal;
+      white-space: nowrap;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      margin: .25em;
+    }
+    button, input {
+      font-family: inherit;
+      width: 100%;
+      display: inline-block;
+      vertical-align: middle;
+      box-sizing: border-box;
+    }
+    h2 {
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>youtube-dl as a service</h1>
+  </header>
 
-    <title>yaas: youtube-dl as a service</title>
+  <main>
+    <p><a href="https://github.com/natanlao/yaas">yaas</a> is a video downloader. It uses <a href="https://github.com/ytdl-org/youtube-dl">youtube-dl</a> behind the scenes.</p>
 
-    <style type="text/css">
-      /* Header */
-      input { border-radius: 0 !important; box-shadow: none !important; }
-      legend { border: 0 !important; font-size: 1.15em; }
+    <form action="{{ url_for('get_video') }}" method="POST">
+      <fieldset>
+        <input type="text" name="url" placeholder="Video link">
+        <button type="submit">Fetch video</button>
+      </fieldset>
+    </form>
 
-      /* Body */
-      .error { color: rgb(202, 60, 60); }
-      .error section { margin-top: 0; margin-bottom: 0; }
-      p, a { color: #333; text-align: justify; }
-      a:hover { color: #cbcbcb; }
-
-      /* Structure */
-      /* pure.css squashes text on small screens */
-      .container { padding: 1em 2em; max-width: 768px; margin: 0 auto; letter-spacing: normal !important; }
-      @media screen and (min-width: 48em) {
-        section { margin: 1.5em; }
-        button { height: 36px; }
-        header { padding: 0 1.25em; }
-        ul { padding-left: 20px !important; }
-      }
-
-      /* Footer */
-      footer { text-align: center !important; }
-      footer, footer a, footer a:visited { color: #cbcbcb; }
-      footer a:hover { color: #333; }
-
-      /* Sticky footer */
-      body { display: flex; min-height: 100vh; flex-direction: column; }
-      #main { flex: 1; }
-    </style>
-
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/g/pure@0.6.0(base-min.css+buttons-min.css+forms-min.css+forms-nr-min.css+grids-min.css+grids-responsive-min.css)">
-  </head>
-
-  <body>
-    <div class="pure-g container" id="main">
-
-      {# Header #}
-      <header class="pure-u-1">
-        <form action="{{ url_for('get_video') }}" method="POST" class="pure-form">
-          <fieldset>
-            <legend><b>yaas</b> youtube-dl as a service</legend>
-            <input type="text" name="url" id="url" placeholder="Video link" class="pure-u-sm-3-4 pure-u-1">
-            <button type="submit" class="pure-button pure-u-sm-1-5 pure-u-1">Go</button>
-          </fieldset>
-        </form>
-      </header>
-
-      {# Flashed messages #}
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          <div class="pure-u-1 error">
-            <section>
-              {% for message in messages %}
-                <div><b>Error</b> {{ message }}</div>
-              {% endfor %}
-            </section>
-          </div>
-        {% endif %}
-      {% endwith %}
-
-      {# Body #}
-      <div class="pure-u-md-1-2 pure-u-sm-1">
+  {# Flashed messages #}
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div>
         <section>
-          <h4>What is this?</h4>
-          <p><code><a href="https://github.com/rg3/youtube-dl">youtube-dl</a></code> is an open-source video downloading tool that can download videos from a wide variety of sites. It's pretty cool.</p>
-          <p><code><a href="https://github.com/natanlao/yaas">yaas</a></code> (youtube-dl as a service) provides a really simple front-end to <code>youtube-dl</code>.</p>
+          {% for message in messages %}
+            <div><b>Error</b> {{ message }}</div>
+          {% endfor %}
         </section>
       </div>
+    {% endif %}
+  {% endwith %}
 
-      <div class="pure-u-md-1-2 pure-u-sm-1">
-        <section>
-          <h4>Supported sites</h4>
-          <ul>
-            <li>youtube.com</li>
-            <li>vimeo.com</li>
-            <li>twitch.tv</li>
-            <li>soundcloud.com</li>
-            <li>instagram.com</li>
-            <li>dailymotion.com</li>
-            <li>cnn.com</li>
-            <li><a href="https://rg3.github.io/youtube-dl/supportedsites.html">Full list →</a></li>
-          </ul>
-        </section>
-      </div>
-    </div>
+    <h2>Supported sites</h2>
+    <ul>
+      <li>youtube.com</li>
+      <li>vimeo.com</li>
+      <li>twitch.tv</li>
+      <li>soundcloud.com</li>
+      <li>instagram.com</li>
+      <li>dailymotion.com</li>
+      <li>cnn.com</li>
+    </ul>
+    <p>Or see the <a href="https://ytdl-org.github.io/youtube-dl/supportedsites.html">full list of supported sites</a>.</p>
+  </main>
 
-    {# Footer #}
-    <div class="pure-g container">
-      <div class="pure-u-1">
-        <footer>
-          <small><a href="https://github.com/rg3/youtube-dl">youtube-dl {{ youtubedl_version }}</a></small> • <small><a href="https://github.com/natanlao/yaas">yaas {{ yaas_version }}</a></small>
-        </footer>
-      </div>
-    </div>
+  <footer>
+    <small>
+      youtube-dl <a href="https://github.com/ytdl-org/youtube-dl">{{ youtubedl_version }}</a><br>
+      yaas <a href="https://github.com/natanlao/yaas">{{ yaas_version }}</a><br>
+      Background <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> <a href="https://www.heropatterns.com/">Steve Schoger</a>.<br>
+    </small>
+  </footer>
 
-  </body>
+</body>
 </html>
