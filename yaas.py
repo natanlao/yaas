@@ -32,7 +32,7 @@ def fetch_redirect():
         return redirect(url_for('index'))
 
 
-@app.route('/fetch')
+@app.route('/details')
 def fetch():
     try:
         url = request.args['url']
@@ -45,6 +45,12 @@ def fetch():
         return render_template('error.html', error=parse_err(e))
     else:
         return render_template('video.html', videos=videos)
+
+
+@app.route('/details.json')
+def fetch_json():
+    url = request.args['url']
+    return jsonify(get_video_info(url))
 
 
 def get_video_info(url: str) -> Sequence[Mapping]:

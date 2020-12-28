@@ -20,10 +20,10 @@
 {% block main %}
 {% for video in videos %}
 <section>
-  <h2><a href="{{ video['webpage_url'] }}">{{ video.get('title', 'Video') }}</a></h2>
+  <h2><a href="{{ video['webpage_url'] }}">{{ video['title'] }}</a></h2>
 <p>{{ video['extractor_key'] }} video by <a href="{{ video['uploader_url'] }}">{{ video['uploader'] }}</a></p>
 <p>
-  <a href="{{ video['url'] }}" download="{{ video.get('title', 'video') }}.{{ video['ext'] }}">Download (best quality)</a>
+  <a href="{{ video['url'] }}" download="{{ video['title'] }}.{{ video['ext'] }}">Download (best quality)</a>
   {% if video['filesize'] %}
   ({{ video['filesize']|human_filesize }})
   {% endif %}
@@ -40,6 +40,7 @@
     </li>
     {% endfor %}
   </ul>
+  <small><a href="{{ url_for('fetch_json', url=video['webpage_url']) }}" target="_blank">View metadata (JSON)</a></small>
 </details>
 </section>
 {% endfor %}
