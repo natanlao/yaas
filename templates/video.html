@@ -1,0 +1,37 @@
+{% extends '_base.html' %}
+{% block main %}
+  {% for video in videos %}
+    <style type="text/css">
+section { border: 1px #FFF solid;  /* TODO: Lightmode */
+    padding: 1em;
+    margin-top: 1em;
+}
+  section h2 { margin-top: 0; }
+  section h2 a { border-bottom: 0; }
+    </style>
+  <section>
+      <h2><a href="{{ video['webpage_url'] }}">{{ video.get('title', 'Video') }}</a></h2>
+    <p>{{ video['extractor_key'] }} video by <a href="{{ video['uploader_url'] }}">{{ video['uploader'] }}</a></p>
+    <p>
+      <a href="{{ video['url'] }}" download="{{ video.get('title', 'video') }}.{{ video['ext'] }}">Download (best quality)</a>
+      {% if video['filesize'] %}
+      ({{ video['filesize']|human_filesize }})
+      {% endif %}
+    </p>
+    <details>
+      <summary>All formats</summary>
+      <ul>
+        {% for format in video['formats']|reverse %}
+        <li>
+          <a href="{{ format['url'] }}">{{ format['ext'] }} ({{format ['format_note'] }})</a>
+          {% if format['filesize'] %}
+          ({{ format['filesize']|human_filesize }})
+          {% endif %}
+        </li>
+        {% endfor %}
+      <ul>
+    </details>
+  </section>
+  {% endfor %}
+{% endblock %}
+
