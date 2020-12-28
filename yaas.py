@@ -99,5 +99,17 @@ def versions() -> Mapping[str, str]:
     }
 
 
-# TODO: Error handlers
+@app.errorhandler(404)
+def handle_404(error):
+    return render_template('error.html', error=error.description), 404
+
+
+@app.errorhandler(500)
+def handle_500(error):
+    return render_template('error.html', error=error.description), 500
+
+
+@app.errorhandler(502)
+def handle_502(error):
+    return redirect(url_for('index'))
 
