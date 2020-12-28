@@ -11,9 +11,11 @@ app = Flask(__name__)
 app.jinja_env.undefined = StrictUndefined
 
 ydl = youtube_dl.YoutubeDL({
+    'logger': app.logger,
     'no_color': True,
+    'quiet': True,
     'skip_download': True
-})  # TODO: Set logger, cachedir?
+})
 ydl.add_default_info_extractors()
 
 
