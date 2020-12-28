@@ -24,20 +24,15 @@ def index():
     return render_template('_base.html')
 
 
-@app.route('/video', methods=['POST'])
-def fetch_redirect():
-    if request.form['url']:
-        return redirect(url_for('fetch', url=request.form['url']))
-    else:
-        return redirect(url_for('index'))
-
-
 @app.route('/details')
 def fetch():
     try:
         url = request.args['url']
     except KeyError:
         return redirect(url_for('index'))
+    else:
+        if not url:
+            return redirect(url_for('index'))
 
     try:
         videos = get_video_info(url)

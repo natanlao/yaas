@@ -51,7 +51,7 @@
   <main>
     <p><a href="{{ url_for('index') }}">yaas</a> is a video downloader. It uses <a href="https://github.com/ytdl-org/youtube-dl">youtube-dl</a> behind the scenes.</p>
 
-    <form action="{{ url_for('fetch_redirect') }}" method="POST"> <!-- TODO: is this necessary? -->
+    <form action="{{ url_for('fetch') }}" method="GET">
       <fieldset>
         <input type="text" name="url" placeholder="Video link">
         <button type="submit">Fetch video</button>
