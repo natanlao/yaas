@@ -1,4 +1,4 @@
-from typing import Mapping, Sequence
+from typing import Mapping, Sequence, Union
 
 from flask import Flask, jsonify, render_template, redirect, request, url_for
 from jinja2 import StrictUndefined
@@ -48,12 +48,8 @@ def fetch_json():
     return jsonify(get_video_info(url))
 
 
+# TODO: More playlist details
 def get_video_info(url: str) -> Sequence[Mapping]:
-    """
-    >>> get_video_info(...)
-    {}
-    >>> get_video_info(...)
-    """
     info = ydl.extract_info(url)
     if info.get('_type') == 'playlist':
         return info['entries']
@@ -79,9 +75,9 @@ def parse_err(err: youtube_dl.utils.DownloadError) -> str:
         return f'Unknown error: {msg!r}'
 
 
-
 # https://stackoverflow.com/a/1094933
-def human_filesize(num: int, suffix: str = 'B'):
+def human_filesize(num: Union[float, int], suffix: str = 'B'):
+    num = float(num)
     for unit in ('', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi'):
         if abs(num) < 1024.0:
             return f'{num:3.1f} {unit}{suffix}'
@@ -113,4 +109,3 @@ def handle_500(error):
 @app.errorhandler(502)
 def handle_502(error):
     return redirect(url_for('index'))
-

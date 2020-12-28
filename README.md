@@ -10,20 +10,20 @@ ended up using it with some regularity over the years, so I keep it up-to-date.
 
 ## Parity with youtube-dl
 
-Given the breadth of services it supports, youtube-dl's functionality evolves
-rapidly. It doesn't appear to provide any compatibility guarantees for its API,
-nor does it use semantic versioning (which makes sense).
-
-This repository is configured with Dependabot and some basic tests. When a new
-version of youtube-dl is released, Dependabot opens a pull request which is
-automatically merged if tests pass. This minimizes the work I need to do to keep
-yaas working.
+This repository is configured with Dependabot to streamline the process of
+keeping up with youtube-dl's release cycle, which evolves rapidly.
 
 
 ## Usage
 
+### Development
+
 ```console
 $ pip install -r requirements.txt
 $ FLASK_ENV=development FLASK_APP=yaas.py flask run
+```
+
+```console
+$ make test
 ```
 
