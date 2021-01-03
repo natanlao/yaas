@@ -27,3 +27,10 @@ $ FLASK_ENV=development FLASK_APP=yaas.py flask run
 $ make test
 ```
 
+### Production
+
+```console
+$ docker build . -t yaas
+$ docker run -p 80:80 yaas
+```
+
