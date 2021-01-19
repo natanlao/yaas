@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
@@ -20,3 +22,9 @@ jobs:
         pip install -r requirements.dev.txt
     - name: Lint with flake8
       run: make test
+    - name: Deploy
+      uses: dokku/github-action@v1.0.1
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+      with:
+        git_remote_url: 'ssh://dokku@platform.natan.la/yaas'
+        ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
