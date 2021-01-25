@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
   <title>yaas: youtube-dl as a service</title>
   <link rel="stylesheet" href="https://natan.la/css/default.css">
   <style>
@@ -18,15 +18,21 @@
       margin: .25em;
     }
     button {
-      font-size: 100%;
-      border: transparent;
       padding: .4em;
+      color: black;
+      border: transparent;
+      background-color: #e6e6e6;
       text-decoration: none;
       line-height: normal;
       white-space: nowrap;
       text-align: center;
       cursor: pointer;
+      -webkit-user-drag: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
       user-select: none;
+      -webkit-box-sizing: none;
       margin: .25em;
     }
     button, input {
@@ -35,10 +41,11 @@
       display: inline-block;
       vertical-align: middle;
       box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      font-size: 100%;
+      border-radius: 0;
     }
-    h2 {
-      margin-top: 1em;
-    }
+    h2 { margin-top: 1em; }
   </style>
   {% block head %}
   {% endblock head %}
