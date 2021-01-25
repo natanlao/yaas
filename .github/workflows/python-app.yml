@@ -1,9 +1,11 @@
 name: Python application
+
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,12 +22,29 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -r requirements.dev.txt
-    - name: Lint with flake8
+    - name: Lint and test
       run: make test
     - name: Deploy
       uses: dokku/github-action@v1.0.1
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+      if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       with:
         git_remote_url: 'ssh://dokku@platform.natan.la/yaas'
         ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
         git_push_flags: --force
+  automerge:
+    # Maybe this should be its own workflow, but dependencies are easier this way.
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]'
+    steps:
+    - name: Auto-merge youtube-dl updates
+      uses: hmarr/auto-approve-action@v2.0.0
+      # GitHub explicitly declined to implement auto-approval of Dependabot
+      # PRs for security reasons; to prevent a compromised dependency from
+      # propagating quickly. Ignoring this is a tradeoff: we ignore this
+      # consideration in a single case for youtube-dl since functionality
+      # breaks (and is fixed) quickly. Since we aren't processing user data
+      # or anything particularly sensitive, I think this tradeoff is acceptable.
+      if: startsWith('refs/heads/dependabot/pip/youtube-dl', github.ref)
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"

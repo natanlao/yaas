@@ -11,7 +11,8 @@ ended up using it with some regularity over the years, so I keep it up-to-date.
 ## Parity with youtube-dl
 
 This repository is configured with Dependabot to streamline the process of
-keeping up with youtube-dl's release cycle, which evolves rapidly.
+keeping up with youtube-dl's release cycle, which evolves rapidly. Dependabot
+PRs for youtube-dl are merged automatically once tests pass.
 
 
 ## Usage
