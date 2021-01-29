@@ -1,7 +1,7 @@
 # yaas
 
 "youtube-dl as a service". Lightweight wrapper around
-[rg3/youtube-dl](https://github.com/rg3/youtube-dl) written in Flask.
+[rg3/youtube-dl](https://github.com/rg3/youtube-dl) written using Starlette.
 Check out the [Live demo](https://yaas.natan.la).
 
 I wrote this around 2014 for one of my HS teachers who wanted a better,
@@ -21,7 +21,8 @@ PRs for youtube-dl are merged automatically once tests pass.
 
 ```console
 $ pip install -r requirements.txt
-$ FLASK_ENV=development FLASK_APP=yaas.py flask run
+$ pip install -r requirements.dev.txt
+$ uvicorn yaas:app --reload
 ```
 
 ```console

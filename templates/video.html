@@ -40,7 +40,7 @@
     </li>
     {% endfor %}
   </ul>
-  <small><a href="{{ url_for('fetch_json', url=video['webpage_url']) }}" target="_blank">View metadata (JSON)</a></small>
+  <small><a href="{{ url_for_query(request, 'fetch_json', url=video['webpage_url']) }}" target="_blank">View metadata (JSON)</a></small>
 </details>
 </section>
 {% endfor %}

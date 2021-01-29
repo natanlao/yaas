@@ -1,51 +1,93 @@
+import urllib.parse
 from typing import Mapping, Sequence, Union
 
-from flask import Flask, jsonify, render_template, redirect, request, url_for
 from jinja2 import StrictUndefined
+from starlette.applications import Starlette
+from starlette.exceptions import HTTPException
+from starlette.requests import Request
+from starlette.responses import JSONResponse, Response, RedirectResponse
+from starlette.templating import Jinja2Templates
 import youtube_dl
 
-__version__ = "0.2.0"
+__version__ = '1.0.0'
 
 
-app = Flask(__name__)
-app.jinja_env.undefined = StrictUndefined
+# https://stackoverflow.com/a/1094933
+def human_filesize(num: Union[float, int], suffix: str = 'B'):
+    num = float(num)
+    for unit in ('', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi'):
+        if abs(num) < 1024.0:
+            return f'{num:3.1f} {unit}{suffix}'
+        num /= 1024.0
+    return f'{num:.1f} Yi{suffix}'
+
+
+def url_for_query(request: Request, name: str, **params: str) -> str:
+    # https://github.com/encode/starlette/issues/560
+    url = request.url_for(name)
+    parsed = list(urllib.parse.urlparse(url))
+    parsed[4] = urllib.parse.urlencode(params)
+    return urllib.parse.urlunparse(parsed)
+
+
+def handle_http_exception(request: Request, exc: HTTPException) -> Response:
+    context = {
+        'error': f'{exc.detail} (HTTP {exc.status_code})',
+        'request': request
+    }
+    return templates.TemplateResponse('error.html', context)
+
 
 ydl = youtube_dl.YoutubeDL({
-    'logger': app.logger,
     'no_color': True,
     'quiet': True,
     'skip_download': True
 })
 ydl.add_default_info_extractors()
 
+templates = Jinja2Templates(directory='templates')
+templates.env.undefined = StrictUndefined
+templates.env.filters['human_filesize'] = human_filesize
+templates.env.globals.update({
+    'url_for_query': url_for_query,
+    'youtubedl_version': youtube_dl.version.__version__,
+    'yaas_version': __version__
+})
+exception_handlers = {
+    HTTPException: handle_http_exception
+}
+# https://github.com/encode/starlette/issues/1142
+app = Starlette(exception_handlers=exception_handlers)  # type: ignore
+
 
 @app.route('/')
-def index():
-    return render_template('_base.html')
+async def index(request: Request) -> Response:
+    return templates.TemplateResponse('_base.html', {'request': request})
 
 
 @app.route('/details')
-def fetch():
+async def fetch(request: Request) -> Response:
     try:
-        url = request.args['url']
+        url = request.query_params['url']
     except KeyError:
-        return redirect(url_for('index'))
+        return RedirectResponse(url=request.url_for('index'))
     else:
         if not url:
-            return redirect(url_for('index'))
+            return RedirectResponse(url=request.url_for('index'))
 
     try:
         videos = get_video_info(url)
     except youtube_dl.utils.DownloadError as e:
-        return render_template('error.html', error=parse_err(e))
+        # A handled youtube-dl error is still an HTTP 200 from us
+        return templates.TemplateResponse('error.html', {'error': parse_err(e), 'request': request})
     else:
-        return render_template('video.html', videos=videos)
+        return templates.TemplateResponse('video.html', {'videos': videos, 'request': request})
 
 
 @app.route('/details.json')
-def fetch_json():
-    url = request.args['url']
-    return jsonify(get_video_info(url))
+def fetch_json(request: Request) -> Response:
+    url = request.query_params['url']
+    return JSONResponse(get_video_info(url))
 
 
 # TODO: More playlist details
@@ -73,39 +115,3 @@ def parse_err(err: youtube_dl.utils.DownloadError) -> str:
         return f'Unknown error: {msg[len(log_prefix):]}'
     else:
         return f'Unknown error: {msg!r}'
-
-
-# https://stackoverflow.com/a/1094933
-def human_filesize(num: Union[float, int], suffix: str = 'B'):
-    num = float(num)
-    for unit in ('', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi'):
-        if abs(num) < 1024.0:
-            return f'{num:3.1f} {unit}{suffix}'
-        num /= 1024.0
-    return f'{num:.1f} Yi{suffix}'
-
-
-app.jinja_env.filters['human_filesize'] = human_filesize
-
-
-@app.context_processor
-def versions() -> Mapping[str, str]:
-    return {
-        'youtubedl_version': youtube_dl.version.__version__,
-        'yaas_version': __version__
-    }
-
-
-@app.errorhandler(404)
-def handle_404(error):
-    return render_template('error.html', error=error.description), 404
-
-
-@app.errorhandler(500)
-def handle_500(error):
-    return render_template('error.html', error=error.description), 500
-
-
-@app.errorhandler(502)
-def handle_502(error):
-    return redirect(url_for('index'))
