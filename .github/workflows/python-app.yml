@@ -45,6 +45,6 @@ jobs:
       # consideration in a single case for youtube-dl since functionality
       # breaks (and is fixed) quickly. Since we aren't processing user data
       # or anything particularly sensitive, I think this tradeoff is acceptable.
-      if: startsWith('refs/heads/dependabot/pip/youtube-dl', github.ref)
+      # if: startsWith('refs/heads/dependabot/pip/youtube-dl', github.ref)
       with:
         github-token: "${{ secrets.GITHUB_TOKEN }}"
