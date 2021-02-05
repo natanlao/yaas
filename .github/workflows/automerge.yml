@@ -1,0 +1,32 @@
+name: Auto-merge youtube-dl updates
+# GitHub explicitly declined to implement auto-approval of Dependabot PRs to
+# prevent a compromised dependency from propagating quickly. We do it anyway
+# because:
+# 1. youtube-dl functionality breaks, and is fixed, rapidly. Not keeping
+#    youtube-dl up to date means that yaas breaks.
+# 2. yaas doesn't store any personal information.
+# 3. I don't want to have to manually open and approve PRs all the time.
+# So the tradeoff is worth it. I mean, it's a side project.
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    if: |
+      (github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]')
+      && startsWith(github.ref, 'refs/heads/dependabot/pip/youtube-dl')
+    steps:
+    - name: Auto-merge youtube-dl updates
+      uses: actions/github-script@v3
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
+        script: |
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '@dependabot merge'
+          })
