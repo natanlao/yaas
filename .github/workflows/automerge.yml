@@ -9,14 +9,15 @@ name: Auto-merge youtube-dl updates
 # So the tradeoff is worth it. I mean, it's a side project.
 
 on:
-  pull_request:
+  pull_request_target:
     branches: [ master ]
+    types: [ labeled ]
 
 jobs:
   automerge:
     runs-on: ubuntu-latest
     if: |
-      (github.actor == 'dependabot[bot]' || github.actor == 'dependabot-preview[bot]')
+      github.actor == 'dependabot[bot]'
       && startsWith(github.head_ref, 'dependabot/pip/youtube-dl')
     steps:
     - name: Auto-merge youtube-dl updates
