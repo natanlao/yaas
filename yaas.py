@@ -13,13 +13,18 @@ __version__ = '1.0.0'
 
 
 # https://stackoverflow.com/a/1094933
-def human_filesize(num: Union[float, int], suffix: str = 'B'):
+def human_filesize(num: Union[float, int], suffix: str = 'B') -> str:
     num = float(num)
     for unit in ('', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi'):
         if abs(num) < 1024.0:
             return f'{num:3.1f} {unit}{suffix}'
         num /= 1024.0
     return f'{num:.1f} Yi{suffix}'
+
+
+def print_filesize(video: Mapping) -> str:
+    filesize = video.get('filesize', video.get('filesize_approx'))
+    return f'({human_filesize(filesize)})' if filesize else ''
 
 
 def url_for_query(request: Request, name: str, **params: str) -> str:
@@ -47,7 +52,7 @@ ydl.add_default_info_extractors()
 
 templates = Jinja2Templates(directory='templates')
 templates.env.undefined = StrictUndefined
-templates.env.filters['human_filesize'] = human_filesize
+templates.env.filters['print_filesize'] = print_filesize
 templates.env.globals.update({
     'url_for_query': url_for_query,
     'youtubedl_version': youtube_dl.version.__version__,

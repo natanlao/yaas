@@ -20,23 +20,38 @@
 {% block main %}
 {% for video in videos %}
 <section>
+  {#
+  These attributes are guaranteed to be defined
+  (see youtube_dl.extractors.common.InfoExtractor):
+  - title
+  - webpage_url (since it must be provided to yaas)
+  - ext (either required or inferred from URL)
+  - format
+
+  These attributes are not guaranteed to be defined:
+  - extractor_key
+  - url
+  #}
   <h2><a href="{{ video['webpage_url'] }}">{{ video['title'] }}</a></h2>
-<p>{{ video['extractor_key'] }} video by <a href="{{ video['uploader_url'] }}">{{ video['uploader'] }}</a></p>
+  <p>
+     {% if 'extractor_key' in video %}
+     {{ video['extractor_key'] }} video
+     {% endif %}
+     {% if 'uploader_url' in video and 'uploader' in video %}
+     by <a href="{{ video['uploader_url'] }}">{{ video['uploader'] }}</a>
+     {% endif %}
+  </p>
 <p>
   <a href="{{ video['url'] }}" download="{{ video['title'] }}.{{ video['ext'] }}">Download (best quality)</a>
-  {% if video['filesize'] %}
-  ({{ video['filesize']|human_filesize }})
-  {% endif %}
+  {{ video|print_filesize }}
 </p>
 <details>
   <summary>All formats</summary>
   <ul>
     {% for format in video['formats']|reverse %}
     <li>
-      <a href="{{ format['url'] }}">{{ format['ext'] }} ({{format ['format_note'] }})</a>
-      {% if format['filesize'] %}
-      ({{ format['filesize']|human_filesize }})
-      {% endif %}
+      <a href="{{ format['url'] }}">{{ format['ext'] }} ({{ format['format'] }})</a>
+      {{ format|print_filesize }}
     </li>
     {% endfor %}
   </ul>
