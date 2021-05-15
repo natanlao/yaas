@@ -45,6 +45,13 @@
   <a href="{{ video['url'] }}" download="{{ video['title'] }}.{{ video['ext'] }}">Download (best quality)</a>
   {{ video|print_filesize }}
 </p>
+{# The fetch standard forbids setting the Referer header. To be fair, it also
+   forbids setting a bunch of other headers that many youtube-dl extractors
+   want, but a lot of the time, you can just try downloading and it'll be fine.
+   I think this approach is a good middle ground. #}
+{% if video.get('http_headers', {}).get('Referer') %}
+<p>Due to technical limitations, this download may fail if attempted in the browser. For best results, try using youtube-dl directly.</p>
+{% endif %}
 <details>
   <summary>All formats</summary>
   <ul>
