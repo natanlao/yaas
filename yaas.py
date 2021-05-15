@@ -80,6 +80,8 @@ async def fetch(request: Request) -> Response:
     except youtube_dl.utils.DownloadError as e:
         # A handled youtube-dl error is still an HTTP 200 from us
         return templates.TemplateResponse('error.html', {'error': parse_err(e), 'request': request})
+    except NotImplementedError as exc:
+        return templates.TemplateResponse('error.html', {'error': str(exc), 'request': request})
     else:
         return templates.TemplateResponse('video.html', {'videos': videos, 'request': request})
 
@@ -93,10 +95,16 @@ def fetch_json(request: Request) -> Response:
 # TODO: More playlist details
 def get_video_info(url: str) -> Sequence[Mapping]:
     info = ydl.extract_info(url)
-    if info.get('_type') == 'playlist':
+    # youtube_dl.extractors.common.InfoExtractor says we should assume _type
+    # is 'video' if it is missing.
+    media_type = info.get('_type', 'video')
+    if media_type == 'video':
+        return [info]
+    elif media_type in ('playlist', 'multi_video'):
         return info['entries']
     else:
-        return [info]
+        raise NotImplementedError(f'Media type {info["_type"]} is supported by '
+                                  'youtube-dl, but not by yaas.')
 
 
 def parse_err(err: youtube_dl.utils.DownloadError) -> str:
