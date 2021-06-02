@@ -2,4 +2,4 @@ flake8==3.9.2
 mypy==0.812
 mypy-extensions==0.4.3
 requests==2.25.1
-uvicorn==0.13.4
+uvicorn==0.14.0
