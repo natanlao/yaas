@@ -5,7 +5,7 @@ from jinja2 import StrictUndefined
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
-from starlette.responses import JSONResponse, Response, RedirectResponse
+from starlette.responses import JSONResponse, PlainTextResponse, Response, RedirectResponse
 from starlette.templating import Jinja2Templates
 import youtube_dl
 
@@ -66,6 +66,7 @@ app = Starlette(exception_handlers=exception_handlers)  # type: ignore
 
 
 @app.route('/')
+@app.route('/index.html')  # propriety
 async def index(request: Request) -> Response:
     return templates.TemplateResponse('_base.html', {'request': request})
 
@@ -95,6 +96,18 @@ async def fetch(request: Request) -> Response:
 def fetch_json(request: Request) -> Response:
     url = request.query_params['url']
     return JSONResponse(get_video_info(url))
+
+
+@app.route('/robots.txt')
+def robots_txt(request: Request) -> Response:
+    # Prevent indexing of any path except index
+    robots_txt = (
+        'User-Agent: *',
+        'Allow: /index.html',
+        'Allow: /$',  # nonstandard syntax
+        'Disallow: /'
+    )
+    return PlainTextResponse('\n'.join(robots_txt))
 
 
 # TODO: More playlist details
