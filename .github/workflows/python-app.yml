@@ -25,7 +25,7 @@ jobs:
     - name: Lint and test
       run: make test
     - name: Deploy
-      uses: dokku/github-action@v1.0.1
+      uses: dokku/github-action@v1.0.2
       if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       with:
         git_remote_url: 'ssh://dokku@platform.natan.la/yaas'
