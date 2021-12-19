@@ -12,20 +12,20 @@ ended up using it with some regularity over the years, so I keep it up-to-date.
 
 ### Development
 
-```console
-$ pip install -r requirements.txt
-$ pip install -r requirements.dev.txt
-$ uvicorn yaas:app --reload
+```
+pip install -r requirements.txt
+pip install -r requirements.dev.txt
+uvicorn yaas:app --reload
 ```
 
-```console
-$ make test
+```
+make test
 ```
 
 ### Production
 
-```console
-$ docker build . -t yaas
-$ docker run -p 80:80 yaas
+```
+docker build . -t yaas
+docker run -p 80:80 yaas
 ```
 
