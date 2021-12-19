@@ -7,7 +7,7 @@ from starlette.exceptions import HTTPException
 from starlette.requests import Request
 from starlette.responses import JSONResponse, PlainTextResponse, Response, RedirectResponse
 from starlette.templating import Jinja2Templates
-import youtube_dl
+import yt_dlp as youtube_dl
 
 __version__ = '1.0.0'
 

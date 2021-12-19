@@ -57,7 +57,7 @@
   </header>
 
   <main>
-    <p><a href="{{ url_for('index') }}">yaas</a> is a video downloader. It uses <a href="https://github.com/ytdl-org/youtube-dl">youtube-dl</a> behind the scenes.</p>
+    <p><a href="{{ url_for('index') }}">yaas</a> is a video downloader. It uses <a href="https://github.com/yt-dlp/yt-dlp">youtube-dlp</a> behind the scenes.</p>
 
     <form action="{{ url_for('fetch') }}" method="GET">
       <fieldset>
@@ -77,13 +77,13 @@
       <li>dailymotion.com</li>
       <li>cnn.com</li>
     </ul>
-    <p>Or see the <a href="https://ytdl-org.github.io/youtube-dl/supportedsites.html">full list of supported sites</a>.</p>
+    <p>Or see the <a href="https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md">full list of supported sites</a>.</p>
     {% endblock %}
   </main>
 
   <footer>
     <small>
-      youtube-dl <a href="https://github.com/ytdl-org/youtube-dl">{{ youtubedl_version }}</a><br>
+      youtube-dlp <a href="https://github.com/yt-dlp/yt-dlp">{{ youtubedl_version }}</a><br>
       yaas <a href="https://github.com/natanlao/yaas">{{ yaas_version }}</a><br>
       Background <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> <a href="https://www.heropatterns.com/">Steve Schoger</a>.<br>
     </small>
