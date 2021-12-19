@@ -1,4 +1,4 @@
-FROM tiangolo/uvicorn-gunicorn-starlette:python3.8-alpine3.10
+FROM tiangolo/uvicorn-gunicorn-starlette:python3.9-slim
 # Dokku-specific fixes
 ENV FORWARDED_ALLOW_IPS='*'
 ENV PORT=80
