@@ -22,7 +22,7 @@ class SmokeTest(unittest.TestCase):
         self.assertNotIn('error', r.text)
 
     def test_playlist(self):
-        playlist_url = 'https://www.youtube.com/watch?v=1AGCX41FV3A&list=PLED86AD896A3CF401'
+        playlist_url = 'https://www.youtube.com/watch?v=jHgZh4GV9G0&list=PLHy7G7ndrUmpWqBkNKjJRT5urGiPW63Iq'
         r = self.client.get('/details', params={'url': playlist_url})
         self.assertEqual(r.status_code, 200)
         self.assertNotIn('error', r.text)
