@@ -1,5 +1,5 @@
 flake8==6.0.0
 httpx==0.23.3
-mypy==1.0.0
+mypy==1.0.1
 mypy-extensions==1.0.0
 uvicorn==0.20.0
