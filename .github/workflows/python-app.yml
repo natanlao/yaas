@@ -11,8 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - uses: actions/setup-python@v5
       with:
         python-version-file: '.python-version'
     - name: Install dependencies
@@ -23,19 +22,3 @@ jobs:
     - name: Lint and test
       run: make test
 
-  deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    concurrency: deploy
-    runs-on: ubuntu-latest
-    needs:
-    - test
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: Deploy
-      uses: dokku/github-action@v1.4.0
-      with:
-        git_remote_url: 'ssh://dokku@platform.natan.la/yaas'
-        ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-        git_push_flags: --force
