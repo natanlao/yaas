@@ -1,10 +1,8 @@
-FROM tiangolo/uvicorn-gunicorn-starlette:python3.9-slim
-# Dokku-specific fixes
-ENV FORWARDED_ALLOW_IPS='*'
-ENV PORT=80
-EXPOSE 80
-
-COPY requirements.txt /app
-RUN pip install -r /app/requirements.txt
+FROM python:3.12-alpine
+EXPOSE 8123
+WORKDIR /app
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 COPY templates/ /app/templates
 COPY yaas.py /app/main.py
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8123"]
