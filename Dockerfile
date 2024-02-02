@@ -10,4 +10,4 @@ COPY templates/ /app/templates
 COPY yaas.py /app/main.py
 
 USER appuser
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8123"]
+CMD ["uvicorn", "main:app", "--proxy-headers", "--forwarded-allow-ips=*", "--host", "0.0.0.0", "--port", "8123"]
