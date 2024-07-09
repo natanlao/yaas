@@ -1,4 +1,4 @@
 Jinja2==3.1.4
 starlette==0.25.0
-yt-dlp==2024.7.2
+yt-dlp==2024.7.9
 uvicorn==0.30.1
