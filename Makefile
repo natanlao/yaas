@@ -1,4 +1,5 @@
 test:
-	python -m unittest discover
-	flake8 --max-line-length=120 --show-source --count --statistics *.py
-	mypy *.py --ignore-missing-imports
+	uv run python -m unittest discover
+	uv run ruff format
+	uv run ruff check
+	uv run ty check

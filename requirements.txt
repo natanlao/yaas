@@ -1,4 +1,0 @@
-Jinja2==3.1.6
-starlette==0.25.0
-yt-dlp==2026.2.21
-uvicorn==0.30.5

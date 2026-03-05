@@ -1,0 +1,20 @@
+[project]
+name = "yaas"
+version = "1.1.0"
+description = "youtube-dl as a service"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "jinja2>=3.1.6",
+    "starlette>=0.52.1",
+    "uvicorn>=0.41.0",
+    "yt-dlp>=2026.3.3",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "ruff>=0.15.4",
+    "ty>=0.0.20",
+]
+
