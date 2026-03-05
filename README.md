@@ -13,9 +13,8 @@ ended up using it with some regularity over the years, so I keep it up-to-date.
 ### Development
 
 ```
-pip install -r requirements.txt
-pip install -r requirements.dev.txt
-uvicorn yaas:app --reload
+uv sync
+uv run uvicorn yaas:app --reload
 ```
 
 ```
